@@ -56,13 +56,12 @@ export const usePinchNavigation = ({ onLevelChange, isTransitioning }: UsePinchN
       e.touches[0].clientY - e.touches[1].clientY
     );
 
-    const pinchThreshold = 50; // Minimum distance change to trigger level change
+    const pinchThreshold = 50;
     const distanceDelta = currentDistance - startDistance;
 
     if (Math.abs(distanceDelta) > pinchThreshold) {
-      // Pinch out (zoom out) -> go down, Pinch in (zoom in) -> go up
       onLevelChange(distanceDelta > 0 ? 1 : -1);
-      setStartDistance(null); // Reset to prevent multiple triggers
+      setStartDistance(null);
     }
   }, [isMobile, isTransitioning, startDistance, onLevelChange]);
 
@@ -70,7 +69,6 @@ export const usePinchNavigation = ({ onLevelChange, isTransitioning }: UsePinchN
     setStartDistance(null);
   }, []);
 
-  // Set up event listeners
   useEffect(() => {
     if (!isMobile) {
       document.addEventListener('keydown', handleKeyDown);

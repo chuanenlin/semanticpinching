@@ -1,6 +1,8 @@
 import { SemanticPinch } from './components/SemanticPinch';
+import { MultimodalPinch } from './components/MultimodalPinch';
 import styled, { createGlobalStyle } from 'styled-components';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
+import { AnimatePresence } from 'framer-motion';
 
 const GlobalStyle = createGlobalStyle`
   * {
@@ -54,7 +56,39 @@ const AppContainer = styled.div`
   overflow-x: hidden;
 `;
 
+const ModeSwitchContainer = styled.div`
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+  z-index: 1000;
+  display: flex;
+  gap: 8px;
+`;
+
+const ModeButton = styled.button<{ active?: boolean }>`
+  background: ${props => props.active ? 'rgba(0, 0, 0, 0.8)' : 'rgba(0, 0, 0, 0.05)'};
+  color: ${props => props.active ? 'white' : 'rgba(0, 0, 0, 0.5)'};
+  border: none;
+  padding: 8px 16px;
+  border-radius: 16px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-width: 130px;
+  text-align: center;
+  backdrop-filter: blur(4px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+
+  &:hover {
+    color: ${props => props.active ? 'white' : 'rgba(0, 0, 0, 0.8)'};
+    background: ${props => props.active ? 'rgba(0, 0, 0, 0.8)' : 'rgba(0, 0, 0, 0.1)'};
+  }
+`;
+
 function App() {
+  const [mode, setMode] = useState<'semantic' | 'multimodal'>('semantic');
+
   useEffect(() => {
     document.addEventListener('dblclick', (e) => e.preventDefault());
 
@@ -87,7 +121,23 @@ function App() {
     <>
       <GlobalStyle />
       <AppContainer>
-        <SemanticPinch />
+        <ModeSwitchContainer>
+          <ModeButton 
+            active={mode === 'semantic'} 
+            onClick={() => setMode('semantic')}
+          >
+            Text pinching
+          </ModeButton>
+          <ModeButton 
+            active={mode === 'multimodal'} 
+            onClick={() => setMode('multimodal')}
+          >
+            Multimodal pinching
+          </ModeButton>
+        </ModeSwitchContainer>
+        <AnimatePresence mode="wait">
+          {mode === 'semantic' ? <SemanticPinch /> : <MultimodalPinch />}
+        </AnimatePresence>
       </AppContainer>
     </>
   );
