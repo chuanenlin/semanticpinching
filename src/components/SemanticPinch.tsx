@@ -23,15 +23,14 @@ const SEMANTIC_LEVELS: SemanticLevel[] = ['emoji', 'word', 'sentence', 'paragrap
 export const SemanticPinch: React.FC = () => {
   console.log("SemanticPinch is mounting");
   const [currentLevel, setCurrentLevel] = useState<number>(2);
-  const [content, setContent] = useState<string>("The mitochondria is the powerhouse of the cell");
+  const [content, setContent] = useState<string>("The mitochondria is the powerhouse of the cell.");
   const [displayContent, setDisplayContent] = useState(content);
   const [isTransforming, setIsTransforming] = useState(false);
   const [showCompletion, setShowCompletion] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [showKeystroke, setShowKeystroke] = useState<'up' | 'down' | null>(null);
   const [contentCache, setContentCache] = useState<LevelContent>({
-    emoji: "🌱",
-    sentence: "The mitochondria is the powerhouse of the cell"
+    sentence: "The mitochondria is the powerhouse of the cell."
   });
 
   const handleLevelChange = useCallback(async (direction: number) => {
@@ -211,7 +210,11 @@ export const SemanticPinch: React.FC = () => {
         </AnimatePresence>
 
         <ContentContainer>
-          <ContentWrapper isEmojiLevel={currentLevel === SEMANTIC_LEVELS.indexOf('emoji')}>
+          <ContentWrapper 
+            isEmojiLevel={currentLevel === SEMANTIC_LEVELS.indexOf('emoji')}
+            isWordLevel={currentLevel === SEMANTIC_LEVELS.indexOf('word')}
+            isSentenceLevel={currentLevel === SEMANTIC_LEVELS.indexOf('sentence')}
+          >
             {renderContent()}
           </ContentWrapper>
 
