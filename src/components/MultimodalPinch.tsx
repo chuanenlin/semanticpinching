@@ -1,7 +1,7 @@
 import React, { useState, useCallback } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { usePinchNavigation } from '../hooks/usePinchNavigation';
-import { generateImage, generateCaption } from '../utils/replicate';
+import { generateImage, generateCaption } from '../utils/fal';
 import { transformText } from '../utils/openai';
 import { MultimodalLevel, MULTIMODAL_LEVELS } from '../types/multimodal';
 import {

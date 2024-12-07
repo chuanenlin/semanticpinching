@@ -45,13 +45,13 @@ emoji ↔ text ↔ image
    npm install
    ```
 
-3. Configure [OpenAI](https://platform.openai.com/api-keys) and [Replicate](https://replicate.com/account/api-tokens) keys:
+3. Configure [OpenAI](https://platform.openai.com/api-keys) and [FAL](https://fal.ai/dashboard/keys) keys:
    - Create a `.env` file in the root directory
    - Add your API keys:
 
      ```env
      VITE_OPENAI_API_KEY=your_openai_api_key_here
-     VITE_REPLICATE_API_TOKEN=your_replicate_api_token_here
+     VITE_FAL_KEY=your_fal_key_here
      ```
 
 4. Run the development server:
