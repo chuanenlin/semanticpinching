@@ -20,6 +20,7 @@ export const ContentBox = styled.div`
   max-width: 800px;
   margin: 0 auto;
   margin-top: 4rem;
+  margin-bottom: 12rem;
 `;
 
 export const LevelIndicatorContainer = styled.div`
@@ -107,7 +108,7 @@ export const KeystrokeIndicator = styled(motion.div)`
 
 export const ContentContainer = styled(motion.div)`
   background: white;
-  padding: 2rem 3rem;
+  padding: 2rem 4rem;
   border-radius: 24px;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.06);
   width: 100%;
@@ -202,20 +203,21 @@ export const StatusIndicator = styled(motion.div)`
 `;
 
 export const FooterHint = styled.div`
-  position: fixed;
-  bottom: 2rem;
-  left: 0;
-  right: 0;
-  color: #999;
-  font-size: 0.7rem;
-  line-height: 1.6;
-  padding: 0 4rem;
-  opacity: 0.8;
-  max-width: 1200px;
+  position: relative;
+  width: 90%;
+  max-width: 100vw;
   margin: 0 auto;
+  padding: 2rem 1rem;
+  color: #bbb;
+  font-size: 0.7rem;
+  line-height: 1.8;
+  text-align: justify;
+  hyphens: auto;
+  word-wrap: break-word;
 
   a {
-    color: #999;
+    color: #aaa;
     text-decoration: none;
+    word-break: break-all;
   }
 `; 

@@ -14,6 +14,12 @@ const GlobalStyle = createGlobalStyle`
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     background: #f5f5f5;
+    touch-action: pan-x pan-y;
+    overscroll-behavior: none;
+  }
+
+  html {
+    touch-action: manipulation;
   }
 `;
 
