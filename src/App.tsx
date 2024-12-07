@@ -6,6 +6,17 @@ const GlobalStyle = createGlobalStyle`
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    touch-action: manipulation;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    user-select: none;
+  }
+
+  html, body {
+    touch-action: none;
+    overscroll-behavior: none;
+    -webkit-text-size-adjust: 100%;
+    -webkit-tap-highlight-color: transparent;
   }
 
   body {
@@ -14,18 +25,17 @@ const GlobalStyle = createGlobalStyle`
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     background: #f5f5f5;
-    touch-action: pan-x pan-y;
-    overscroll-behavior: none;
-  }
-
-  html {
-    touch-action: manipulation;
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    overflow-y: scroll;
   }
 `;
 
 const AppContainer = styled.div`
   min-height: 100vh;
   width: 100vw;
+  touch-action: none;
 `;
 
 function App() {
