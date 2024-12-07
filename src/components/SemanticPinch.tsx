@@ -2,6 +2,7 @@ import React, { useState, useCallback } from 'react';
 import { AnimatePresence } from 'framer-motion';
 import { transformText } from '../utils/openai';
 import { usePinchNavigation } from '../hooks/usePinchNavigation';
+import { SemanticLevel, SEMANTIC_LEVELS } from '../types/semantic';
 import {
   Container,
   ContentBox,
@@ -15,11 +16,6 @@ import {
   FooterHint
 } from './SemanticPinch.styles';
 
-type SemanticLevel = 'emoji' | 'word' | 'sentence' | 'paragraph' | 'article';
-type LevelContent = { [key in SemanticLevel]?: string };
-
-const SEMANTIC_LEVELS: SemanticLevel[] = ['emoji', 'word', 'sentence', 'paragraph', 'article'];
-
 export const SemanticPinch: React.FC = () => {
   const [currentLevel, setCurrentLevel] = useState<number>(2);
   const [content, setContent] = useState<string>("The mitochondria is the powerhouse of the cell.");
@@ -28,34 +24,8 @@ export const SemanticPinch: React.FC = () => {
   const [showCompletion, setShowCompletion] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [showKeystroke, setShowKeystroke] = useState<'up' | 'down' | null>(null);
-  const [contentCache, setContentCache] = useState<LevelContent>({
-    sentence: "The mitochondria is the powerhouse of the cell."
-  });
-
-  const handleLevelChange = useCallback(async (direction: number) => {
-    const newLevel = Math.max(0, Math.min(SEMANTIC_LEVELS.length - 1, currentLevel + direction));
-    if (newLevel !== currentLevel) {
-      setShowKeystroke(direction < 0 ? 'up' : 'down');
-      setTimeout(() => setShowKeystroke(null), 800);
-      setCurrentLevel(newLevel);
-      const fromLevel = SEMANTIC_LEVELS[currentLevel];
-      const toLevel = SEMANTIC_LEVELS[newLevel];
-      transformContent(fromLevel, toLevel);
-    }
-  }, [currentLevel, content]);
-
-  usePinchNavigation({
-    onLevelChange: handleLevelChange,
-    isTransitioning: isTransforming
-  });
 
   const transformContent = useCallback(async (fromLevel: SemanticLevel, toLevel: SemanticLevel) => {
-    // if (contentCache[toLevel]) {
-    //   setContent(contentCache[toLevel]!);
-    //   setDisplayContent(contentCache[toLevel]!);
-    //   return;
-    // }
-
     setIsTransforming(true);
     setShowCompletion(false);
     setError(null);
@@ -76,11 +46,6 @@ export const SemanticPinch: React.FC = () => {
       );
       setContent(finalContent);
       
-      setContentCache(prev => ({
-        ...prev,
-        [toLevel]: finalContent
-      }));
-      
       setShowCompletion(true);
       setTimeout(() => setShowCompletion(false), 2000);
     } catch (error) {
@@ -89,7 +54,24 @@ export const SemanticPinch: React.FC = () => {
       setDisplayContent(content);
     }
     setIsTransforming(false);
-  }, [content, contentCache]);
+  }, [content]);
+
+  const handleLevelChange = useCallback(async (direction: number) => {
+    const newLevel = Math.max(0, Math.min(SEMANTIC_LEVELS.length - 1, currentLevel + direction));
+    if (newLevel !== currentLevel) {
+      setShowKeystroke(direction < 0 ? 'up' : 'down');
+      setTimeout(() => setShowKeystroke(null), 800);
+      setCurrentLevel(newLevel);
+      const fromLevel = SEMANTIC_LEVELS[currentLevel];
+      const toLevel = SEMANTIC_LEVELS[newLevel];
+      transformContent(fromLevel, toLevel);
+    }
+  }, [currentLevel, transformContent]);
+
+  usePinchNavigation({
+    onLevelChange: handleLevelChange,
+    isTransitioning: isTransforming
+  });
 
   const renderContent = () => {
     if (!displayContent.trim()) {
@@ -107,7 +89,6 @@ export const SemanticPinch: React.FC = () => {
               const newContent = [e.target.textContent, ...parts.slice(1)].join('\n\n');
               setContent(newContent);
               setDisplayContent(newContent);
-              setContentCache(prev => ({ ...prev, [SEMANTIC_LEVELS[currentLevel]]: newContent }));
             }}
           >
             {parts[0]}
@@ -123,7 +104,6 @@ export const SemanticPinch: React.FC = () => {
                 const newContent = newParts.join('\n\n');
                 setContent(newContent);
                 setDisplayContent(newContent);
-                setContentCache(prev => ({ ...prev, [SEMANTIC_LEVELS[currentLevel]]: newContent }));
               }}
             >
               {part}
@@ -141,7 +121,6 @@ export const SemanticPinch: React.FC = () => {
           const newContent = e.target.textContent || '';
           setContent(newContent);
           setDisplayContent(newContent);
-          setContentCache(prev => ({ ...prev, [SEMANTIC_LEVELS[currentLevel]]: newContent }));
         }}
         style={{ outline: 'none' }}
       >

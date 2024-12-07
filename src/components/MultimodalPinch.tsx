@@ -3,6 +3,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { usePinchNavigation } from '../hooks/usePinchNavigation';
 import { generateImage, generateCaption } from '../utils/replicate';
 import { transformText } from '../utils/openai';
+import { MultimodalLevel, MULTIMODAL_LEVELS } from '../types/multimodal';
 import {
   Container,
   FooterHint,
@@ -17,9 +18,6 @@ import {
   StatusIndicator
 } from './MultimodalPinch.styles';
 
-export type MultimodalLevel = 'emoji' | 'text' | 'image';
-export const MULTIMODAL_LEVELS: MultimodalLevel[] = ['emoji', 'text', 'image'];
-
 export const MultimodalPinch: React.FC = () => {
   const [currentLevel, setCurrentLevel] = useState<number>(1); // Start at text level
   const [showKeystroke, setShowKeystroke] = useState<'up' | 'down' | null>(null);
@@ -27,7 +25,7 @@ export const MultimodalPinch: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [showCompletion, setShowCompletion] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [content, setContent] = useState({
+  const [content, setContent] = useState<Record<MultimodalLevel, string>>({
     emoji: "",
     text: "An avocado chair",
     image: ""
