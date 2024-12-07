@@ -9,7 +9,7 @@ export const Container = styled.div`
   min-height: 100vh;
   width: 100vw;
   background: #f5f5f5;
-  padding: 2rem;
+  padding: 2rem 2rem 0 2rem;
   box-sizing: border-box;
   overflow: auto;
 `;
@@ -207,7 +207,7 @@ export const FooterHint = styled.div`
   width: 90%;
   max-width: 100vw;
   margin: 0 auto;
-  padding: 2rem 1rem;
+  padding: 2rem 1rem 1rem 1rem;
   color: #bbb;
   font-size: 0.7rem;
   line-height: 1.8;
