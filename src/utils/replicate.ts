@@ -3,8 +3,19 @@ interface ReplicateRequestBody {
   version?: string;
 }
 
+// Get the base URL depending on the environment
+const getBaseUrl = () => {
+  // In development, use relative URL (Vite proxy will handle it)
+  if (import.meta.env.DEV) {
+    return '';
+  }
+  // In production, use the full URL
+  return window.location.origin;
+};
+
 async function replicateRequest(endpoint: string, body: ReplicateRequestBody) {
-  const response = await fetch(`/api/replicate${endpoint}`, {
+  const baseUrl = getBaseUrl();
+  const response = await fetch(`${baseUrl}/api/replicate${endpoint}`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
@@ -41,8 +52,9 @@ export async function generateImage(text: string): Promise<string> {
 }
 
 async function pollPrediction(id: string) {
+  const baseUrl = getBaseUrl();
   while (true) {
-    const response = await fetch(`/api/replicate/predictions/${id}`);
+    const response = await fetch(`${baseUrl}/api/replicate/predictions/${id}`);
     const prediction = await response.json();
     
     if (prediction.status === 'succeeded') {
