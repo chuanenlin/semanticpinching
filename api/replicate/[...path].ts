@@ -17,7 +17,14 @@ export default async function handler(
       replicateUrl = `https://api.replicate.com/v1/${pathSegments}`;
     }
 
-    console.log('Proxying request to:', replicateUrl);
+    // Debug logging
+    console.log('Request details:', {
+      method: request.method,
+      url: replicateUrl,
+      hasToken: !!process.env.REPLICATE_API_TOKEN,
+      tokenFirstChars: process.env.REPLICATE_API_TOKEN ? process.env.REPLICATE_API_TOKEN.substring(0, 4) + '...' : 'none',
+      body: request.method !== 'GET' ? JSON.stringify(request.body) : 'no body'
+    });
 
     const replicateResponse = await fetch(replicateUrl, {
       method: request.method,
@@ -29,6 +36,13 @@ export default async function handler(
     });
 
     const data = await replicateResponse.json();
+
+    // Log response status and headers
+    console.log('Replicate API response:', {
+      status: replicateResponse.status,
+      headers: Object.fromEntries(replicateResponse.headers.entries()),
+      data: data
+    });
 
     if (!replicateResponse.ok) {
       console.error('Replicate API error:', {
