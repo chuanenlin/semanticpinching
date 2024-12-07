@@ -9,7 +9,6 @@ export const usePinchNavigation = ({ onLevelChange, isTransitioning }: UsePinchN
   const [startDistance, setStartDistance] = useState<number | null>(null);
   const [isMobile, setIsMobile] = useState(false);
 
-  // Check if device is mobile/tablet
   useEffect(() => {
     const checkDevice = () => {
       setIsMobile('ontouchstart' in window || navigator.maxTouchPoints > 0);
@@ -19,7 +18,6 @@ export const usePinchNavigation = ({ onLevelChange, isTransitioning }: UsePinchN
     return () => window.removeEventListener('resize', checkDevice);
   }, []);
 
-  // Handle keyboard navigation for desktop
   const handleKeyDown = useCallback((event: KeyboardEvent) => {
     if (isTransitioning || isMobile) return;
     
@@ -37,7 +35,6 @@ export const usePinchNavigation = ({ onLevelChange, isTransitioning }: UsePinchN
     }
   }, [onLevelChange, isTransitioning, isMobile]);
 
-  // Handle pinch gestures for mobile/tablet
   const handleTouchStart = useCallback((e: TouchEvent) => {
     if (!isMobile || isTransitioning || e.touches.length !== 2) return;
     

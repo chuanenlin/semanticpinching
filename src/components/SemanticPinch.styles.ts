@@ -119,9 +119,9 @@ export const ContentContainer = styled(motion.div)`
 `;
 
 export const ContentWrapper = styled.div<{ 
-  isEmojiLevel?: boolean; 
-  isWordLevel?: boolean;
-  isSentenceLevel?: boolean;
+  $isEmojiLevel?: boolean; 
+  $isWordLevel?: boolean;
+  $isSentenceLevel?: boolean;
 }>`
   font-size: 1.1rem;
   line-height: 1.6;
@@ -146,7 +146,7 @@ export const ContentWrapper = styled.div<{
 
   p {
     margin: 0;
-    text-align: ${props => (props.isEmojiLevel || props.isWordLevel || props.isSentenceLevel) ? 'center' : 'justify'};
+    text-align: ${props => (props.$isEmojiLevel || props.$isWordLevel || props.$isSentenceLevel) ? 'center' : 'justify'};
     outline: none;
     
     &:hover {
@@ -158,12 +158,12 @@ export const ContentWrapper = styled.div<{
     margin-top: 1.5rem;
   }
 
-  ${props => props.isEmojiLevel && `
+  ${props => props.$isEmojiLevel && `
     font-size: 1.1rem;
     text-align: center;
   `}
 
-  ${props => (props.isWordLevel || props.isSentenceLevel) && `
+  ${props => (props.$isWordLevel || props.$isSentenceLevel) && `
     text-align: center;
   `}
 `;

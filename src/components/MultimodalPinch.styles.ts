@@ -13,7 +13,7 @@ export const ContentBox = styled.div`
   margin-bottom: 12rem;
 `;
 
-export const TextContent = styled.div<{ isEmoji?: boolean }>`
+export const TextContent = styled.div<{ $isEmoji?: boolean }>`
   background: white;
   padding: 2rem 4rem;
   border-radius: 24px;
@@ -22,7 +22,7 @@ export const TextContent = styled.div<{ isEmoji?: boolean }>`
   height: 500px;
   position: relative;
   margin-top: 1rem;
-  font-size: ${props => props.isEmoji ? '5rem' : '1.2rem'};
+  font-size: ${props => props.$isEmoji ? '5rem' : '1.2rem'};
   line-height: 1.6;
   color: #1a1a1a;
   text-align: center;
@@ -66,7 +66,7 @@ export const KeystrokeIndicator = styled(BaseKeystrokeIndicator)`
 
 export const StatusIndicator = styled(BaseStatusIndicator)`
   position: absolute;
-  top: -0.5rem;
+  top: -0.75rem;
   right: 1rem;
   display: flex;
   align-items: center;

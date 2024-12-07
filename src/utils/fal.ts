@@ -1,6 +1,13 @@
 import { fal } from "@fal-ai/client";
 
-// Configure FAL client
+const originalConsoleWarn = console.warn;
+console.warn = (...args) => {
+  if (typeof args[0] === 'string' && args[0].includes('fal credentials are exposed')) {
+    return;
+  }
+  originalConsoleWarn.apply(console, args);
+};
+
 fal.config({
   credentials: import.meta.env.VITE_FAL_KEY
 });
@@ -23,7 +30,6 @@ export async function generateImage(text: string): Promise<string> {
       throw new Error('No image data received');
     }
 
-    // FAL returns the image URL in the data object
     return result.data.images[0].url;
   } catch (error) {
     console.error('Image generation failed:', error);
@@ -49,7 +55,6 @@ export async function generateCaption(imageUrl: string): Promise<string> {
       throw new Error('No caption data received');
     }
 
-    console.log('Caption result:', result.data);
     return result.data.results.trim();
   } catch (error) {
     console.error('Caption generation failed:', error);

@@ -59,15 +59,17 @@ const AppContainer = styled.div`
 const ModeSwitchContainer = styled.div`
   position: fixed;
   top: 1rem;
-  right: 1rem;
+  left: 50%;
+  transform: translateX(-50%);
   z-index: 1000;
   display: flex;
   gap: 8px;
+  justify-content: center;
 `;
 
-const ModeButton = styled.button<{ active?: boolean }>`
-  background: ${props => props.active ? 'rgba(0, 0, 0, 0.8)' : 'rgba(0, 0, 0, 0.05)'};
-  color: ${props => props.active ? 'white' : 'rgba(0, 0, 0, 0.5)'};
+const ModeButton = styled.button<{ $active?: boolean }>`
+  background: ${props => props.$active ? 'rgba(0, 0, 0, 0.8)' : 'rgba(0, 0, 0, 0.05)'};
+  color: ${props => props.$active ? 'white' : 'rgba(0, 0, 0, 0.5)'};
   border: none;
   padding: 8px 16px;
   border-radius: 16px;
@@ -81,8 +83,8 @@ const ModeButton = styled.button<{ active?: boolean }>`
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 
   &:hover {
-    color: ${props => props.active ? 'white' : 'rgba(0, 0, 0, 0.8)'};
-    background: ${props => props.active ? 'rgba(0, 0, 0, 0.8)' : 'rgba(0, 0, 0, 0.1)'};
+    color: ${props => props.$active ? 'white' : 'rgba(0, 0, 0, 0.8)'};
+    background: ${props => props.$active ? 'rgba(0, 0, 0, 0.8)' : 'rgba(0, 0, 0, 0.1)'};
   }
 `;
 
@@ -123,13 +125,13 @@ function App() {
       <AppContainer>
         <ModeSwitchContainer>
           <ModeButton 
-            active={mode === 'semantic'} 
+            $active={mode === 'semantic'} 
             onClick={() => setMode('semantic')}
           >
             Text pinching
           </ModeButton>
           <ModeButton 
-            active={mode === 'multimodal'} 
+            $active={mode === 'multimodal'} 
             onClick={() => setMode('multimodal')}
           >
             Multimodal pinching

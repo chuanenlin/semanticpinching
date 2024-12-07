@@ -187,9 +187,9 @@ export const SemanticPinch: React.FC = () => {
 
         <ContentContainer>
           <ContentWrapper 
-            isEmojiLevel={currentLevel === SEMANTIC_LEVELS.indexOf('emoji')}
-            isWordLevel={currentLevel === SEMANTIC_LEVELS.indexOf('word')}
-            isSentenceLevel={currentLevel === SEMANTIC_LEVELS.indexOf('sentence')}
+            $isEmojiLevel={currentLevel === SEMANTIC_LEVELS.indexOf('emoji')}
+            $isWordLevel={currentLevel === SEMANTIC_LEVELS.indexOf('word')}
+            $isSentenceLevel={currentLevel === SEMANTIC_LEVELS.indexOf('sentence')}
           >
             {renderContent()}
           </ContentWrapper>

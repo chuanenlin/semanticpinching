@@ -19,7 +19,7 @@ import {
 } from './MultimodalPinch.styles';
 
 export const MultimodalPinch: React.FC = () => {
-  const [currentLevel, setCurrentLevel] = useState<number>(1); // Start at text level
+  const [currentLevel, setCurrentLevel] = useState<number>(1);
   const [showKeystroke, setShowKeystroke] = useState<'up' | 'down' | null>(null);
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -106,7 +106,7 @@ export const MultimodalPinch: React.FC = () => {
     switch (level) {
       case 'emoji':
         return (
-          <TextContent isEmoji>
+          <TextContent $isEmoji>
             {content.emoji}
           </TextContent>
         );
