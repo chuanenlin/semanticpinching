@@ -17,7 +17,7 @@ emoji ↔ word ↔ sentence ↔ paragraph ↔ article
 
 ### Multimodal Mode
 
-Transform between different modalities with LLMs, [image generation](https://github.com/black-forest-labs/flux), and [image captioning](https://github.com/salesforce/BLIP).
+Transform between different modalities with LLMs, [image generation](https://github.com/black-forest-labs/flux), and [image captioning](https://huggingface.co/microsoft/Florence-2-large).
 
 ```text
 emoji ↔ text ↔ image
