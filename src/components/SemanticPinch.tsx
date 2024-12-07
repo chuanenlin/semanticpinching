@@ -233,10 +233,10 @@ export const SemanticPinch: React.FC = () => {
         </ContentContainer>
       </ContentBox>
       <FooterHint>
-        Semantic Pinching. Transform a piece of text between different levels of abstractions: 
-        emoji ↔ word ↔ sentence ↔ paragraph ↔ article. 
-        On mobile/tablet, pinch in/out. On computer, use up/down arrow keys. 
-        Play with the code at <a href="https://github.com/chuanenlin/semanticpinching" target="_blank" rel="noopener noreferrer">https://github.com/chuanenlin/semanticpinching</a>.
+        Semantic Pinching 🤏.
+        <br />
+        Pinch in/out on mobile or press up/down arrow keys on computer.
+        Code at <a href="https://github.com/chuanenlin/semanticpinching" target="_blank" rel="noopener noreferrer">https://github.com/chuanenlin/semanticpinching</a>.
       </FooterHint>
     </Container>
   );

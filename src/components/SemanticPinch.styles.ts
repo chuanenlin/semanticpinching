@@ -25,26 +25,27 @@ export const ContentBox = styled.div`
 
 export const LevelIndicatorContainer = styled.div`
   position: absolute;
-  top: 0.55rem;
+  top: 0.75rem;
   left: 50%;
   transform: translate(-50%, -30%);
   display: flex;
   justify-content: center;
   align-items: center;
-  background: rgba(0, 0, 0, 0.8);
-  padding: 0.4rem 0;
-  border-radius: 24px;
-  backdrop-filter: blur(8px);
+  background: rgba(0, 0, 0, 0.2);
+  padding: 0.2rem 0.5rem;
+  border-radius: 12px;
+  backdrop-filter: blur(4px);
   z-index: 100;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  width: 120px;
-  opacity: 0;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  width: auto;
+  min-width: 60px;
+  opacity: 1;
   pointer-events: none;
 `;
 
 export const LevelText = styled(motion.span)`
-  color: rgba(255, 255, 255, 0.95);
-  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 0.65rem;
   font-weight: 400;
   letter-spacing: 0.3px;
   white-space: nowrap;
@@ -219,7 +220,7 @@ export const FooterHint = styled.div`
   color: #bbb;
   font-size: 0.7rem;
   line-height: 1.8;
-  text-align: justify;
+  text-align: center;
   hyphens: auto;
   word-wrap: break-word;
 
@@ -228,4 +229,4 @@ export const FooterHint = styled.div`
     text-decoration: none;
     word-break: break-all;
   }
-`; 
+`;

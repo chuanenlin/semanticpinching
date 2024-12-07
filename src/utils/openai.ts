@@ -8,8 +8,8 @@ const openai = new OpenAI({
 const PROMPTS = {
   toEmoji: "Convert this text to a single emoji that best represents its meaning. Return ONLY the emoji, nothing else:",
   toWord: "Convert this text to a single word that best captures its essence. Return ONLY the word, nothing else:",
-  toSentence: "Convert this text into a short sentence but longer than a few words. Return ONLY the sentence, no markdown or special characters:",
-  toParagraph: "Convert this text into a succinct paragraph with 3 sentences. Return ONLY the paragraph text, no markdown or special characters:",
+  toSentence: "Convert this text into a short sentence but longer than three words. Return ONLY the sentence, no markdown or special characters:",
+  toParagraph: "Convert this text into a short paragraph with three sentences. Return ONLY the paragraph text, no markdown or special characters:",
   toArticle: "Convert this text into a succinct well-structured article with a short punchy title and two paragraphs. Use two newlines between paragraphs for spacing. Use plain text only, no markdown, no special characters. Format example:\nTitle\n\nFirst paragraph...\n\nSecond paragraph..."
 };
 
