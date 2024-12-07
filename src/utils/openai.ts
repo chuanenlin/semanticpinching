@@ -15,7 +15,7 @@ const PROMPTS = {
 
 export async function transformText(
   content: string,
-  fromLevel: string,
+  _fromLevel: string,
   toLevel: string,
   onStream: (chunk: string) => void
 ): Promise<string> {

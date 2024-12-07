@@ -1,4 +1,3 @@
-import React from 'react';
 import { SemanticPinch } from './components/SemanticPinch';
 import styled, { createGlobalStyle } from 'styled-components';
 
