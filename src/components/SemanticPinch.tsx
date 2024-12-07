@@ -21,7 +21,6 @@ type LevelContent = { [key in SemanticLevel]?: string };
 const SEMANTIC_LEVELS: SemanticLevel[] = ['emoji', 'word', 'sentence', 'paragraph', 'article'];
 
 export const SemanticPinch: React.FC = () => {
-  console.log("SemanticPinch is mounting");
   const [currentLevel, setCurrentLevel] = useState<number>(2);
   const [content, setContent] = useState<string>("The mitochondria is the powerhouse of the cell.");
   const [displayContent, setDisplayContent] = useState(content);
@@ -45,14 +44,12 @@ export const SemanticPinch: React.FC = () => {
     }
   }, [currentLevel, content]);
 
-  // Use the pinch navigation hook
   usePinchNavigation({
     onLevelChange: handleLevelChange,
     isTransitioning: isTransforming
   });
 
   const transformContent = useCallback(async (fromLevel: SemanticLevel, toLevel: SemanticLevel) => {
-    // Cache check temporarily disabled
     // if (contentCache[toLevel]) {
     //   setContent(contentCache[toLevel]!);
     //   setDisplayContent(contentCache[toLevel]!);

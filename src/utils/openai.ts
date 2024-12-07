@@ -39,14 +39,36 @@ export async function transformText(
       stream: true
     });
 
+    let buffer = '';
     let fullResponse = '';
+    const sentenceEndRegex = /[.!?]\s+/g;
+
+    const isSimpleLevel = toLevel === 'emoji' || toLevel === 'word';
 
     for await (const chunk of stream) {
       const content = chunk.choices[0]?.delta?.content || '';
       if (content) {
+        buffer += content;
         fullResponse += content;
-        onStream(fullResponse);
+
+        if (isSimpleLevel) {
+          onStream(fullResponse);
+        } else if (toLevel === 'article') {
+          if (buffer.includes('\n\n')) {
+            onStream(fullResponse);
+            buffer = '';
+          }
+        } else {
+          if (sentenceEndRegex.test(buffer)) {
+            onStream(fullResponse);
+            buffer = '';
+          }
+        }
       }
+    }
+
+    if (buffer) {
+      onStream(fullResponse);
     }
 
     return fullResponse;

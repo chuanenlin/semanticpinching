@@ -56,20 +56,15 @@ const AppContainer = styled.div`
 
 function App() {
   useEffect(() => {
-    // Only prevent double-tap-to-zoom
     document.addEventListener('dblclick', (e) => e.preventDefault());
 
-    // Prevent browser's native pinch zoom while allowing gesture events for our semantic pinch
     document.addEventListener('gesturestart', (e) => {
-      // Only prevent if it's not on our semantic pinch container
       if (!(e.target as Element).closest('.semantic-pinch-container')) {
         e.preventDefault();
       }
     });
 
-    // Let wheel events through for accessibility
     const handleWheel = (e: WheelEvent) => {
-      // Only prevent if it's a pinch-to-zoom gesture (ctrl key is pressed)
       if (e.ctrlKey) {
         e.preventDefault();
       }
