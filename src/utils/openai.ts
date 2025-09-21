@@ -5,6 +5,10 @@ const openai = new OpenAI({
   dangerouslyAllowBrowser: true
 });
 
+if (!import.meta.env.VITE_OPENAI_API_KEY) {
+  throw new Error('VITE_OPENAI_API_KEY environment variable is required');
+}
+
 const PROMPTS = {
   toEmoji: "Convert this text to a single emoji that best represents its meaning. Return ONLY the emoji, nothing else:",
   toWord: "Convert this text to a single word that best captures its essence. Return ONLY the word, nothing else:",
