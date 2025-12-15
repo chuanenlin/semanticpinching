@@ -51,7 +51,7 @@ emoji ↔ text ↔ image
 
      ```env
      OPENAI_API_KEY=your_openai_api_key_here
-     VITE_FAL_KEY=your_fal_key_here
+     FAL_KEY=your_fal_key_here
      ```
 
 4. Run the development server:
