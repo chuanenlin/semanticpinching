@@ -50,7 +50,7 @@ emoji ↔ text ↔ image
    - Add your API keys:
 
      ```env
-     VITE_OPENAI_API_KEY=your_openai_api_key_here
+     OPENAI_API_KEY=your_openai_api_key_here
      VITE_FAL_KEY=your_fal_key_here
      ```
 

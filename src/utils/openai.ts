@@ -1,71 +1,67 @@
-import OpenAI from 'openai';
-
-const openai = new OpenAI({
-  apiKey: import.meta.env.VITE_OPENAI_API_KEY,
-  dangerouslyAllowBrowser: true
-});
-
-if (!import.meta.env.VITE_OPENAI_API_KEY) {
-  throw new Error('VITE_OPENAI_API_KEY environment variable is required');
-}
-
-const PROMPTS = {
-  toEmoji: "Convert this text to a single emoji that best represents its meaning. Return ONLY the emoji, nothing else:",
-  toWord: "Convert this text to a single word that best captures its essence. Return ONLY the word, nothing else:",
-  toSentence: "Convert this text into a short sentence but longer than three words. Return ONLY the sentence, no markdown or special characters:",
-  toParagraph: "Convert this text into a short paragraph with three sentences. Return ONLY the paragraph text, no markdown or special characters:",
-  toArticle: "Convert this text into a succinct well-structured article with a short punchy title and two paragraphs. Use two newlines between paragraphs for spacing. Use plain text only, no markdown, no special characters. Format example:\nTitle\n\nFirst paragraph...\n\nSecond paragraph..."
-};
-
 export async function transformText(
   content: string,
   _fromLevel: string,
   toLevel: string,
   onStream: (chunk: string) => void
 ): Promise<string> {
-  const prompt = PROMPTS[`to${toLevel.charAt(0).toUpperCase() + toLevel.slice(1)}` as keyof typeof PROMPTS];
-  
   try {
-    const stream = await openai.chat.completions.create({
-      messages: [
-        {
-          role: "system",
-          content: "You are a semantic transformation expert that converts text between different levels of detail. Return only plain text without any formatting, markdown, or special characters."
-        },
-        {
-          role: "user",
-          content: `${prompt}\n\nText: ${content}`
-        }
-      ],
-      model: "gpt-4o",
-      temperature: 0.7,
-      max_tokens: toLevel === 'article' ? 1000 : 200,
-      stream: true
+    const response = await fetch('/api/transform', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ content, toLevel }),
     });
 
-    let buffer = '';
-    let fullResponse = '';
-    const sentenceEndRegex = /[.!?]\s+/g;
+    if (!response.ok) {
+      throw new Error('Failed to transform content');
+    }
 
+    const reader = response.body?.getReader();
+    if (!reader) {
+      throw new Error('No response body');
+    }
+
+    const decoder = new TextDecoder();
+    let fullResponse = '';
+    let buffer = '';
+    const sentenceEndRegex = /[.!?]\s+/g;
     const isSimpleLevel = toLevel === 'emoji' || toLevel === 'word';
 
-    for await (const chunk of stream) {
-      const content = chunk.choices[0]?.delta?.content || '';
-      if (content) {
-        buffer += content;
-        fullResponse += content;
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
 
-        if (isSimpleLevel) {
-          onStream(fullResponse);
-        } else if (toLevel === 'article') {
-          if (buffer.includes('\n\n')) {
-            onStream(fullResponse);
-            buffer = '';
-          }
-        } else {
-          if (sentenceEndRegex.test(buffer)) {
-            onStream(fullResponse);
-            buffer = '';
+      const text = decoder.decode(value, { stream: true });
+      const lines = text.split('\n');
+
+      for (const line of lines) {
+        if (line.startsWith('data: ')) {
+          const data = line.slice(6);
+          if (data === '[DONE]') continue;
+
+          try {
+            const parsed = JSON.parse(data);
+            if (parsed.content) {
+              buffer += parsed.content;
+              fullResponse += parsed.content;
+
+              if (isSimpleLevel) {
+                onStream(fullResponse);
+              } else if (toLevel === 'article') {
+                if (buffer.includes('\n\n')) {
+                  onStream(fullResponse);
+                  buffer = '';
+                }
+              } else {
+                if (sentenceEndRegex.test(buffer)) {
+                  onStream(fullResponse);
+                  buffer = '';
+                }
+              }
+            }
+          } catch {
+            // Skip invalid JSON
           }
         }
       }
@@ -77,7 +73,7 @@ export async function transformText(
 
     return fullResponse;
   } catch (error) {
-    console.error('OpenAI API Error:', error);
+    console.error('API Error:', error);
     throw new Error('Failed to transform content');
   }
-} 
+}
