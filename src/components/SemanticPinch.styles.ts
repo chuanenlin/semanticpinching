@@ -221,6 +221,19 @@ export const FooterHint = styled.div`
   font-size: 0.7rem;
   line-height: 1.8;
   text-align: center;
+  .author-credit {
+    display: inline-block;
+    margin-top: 8px;
+    color: #737373;
+    font-size: 13px;
+  }
+  .author-credit a {
+    color: inherit;
+    text-decoration: underline dotted;
+    text-underline-offset: 3px;
+  }
+  .author-credit a:hover { text-decoration-style: solid; }
+  .author-credit a:focus-visible { outline: 2px solid currentColor; outline-offset: 4px; }
   hyphens: auto;
   word-wrap: break-word;
 

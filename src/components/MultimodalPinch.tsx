@@ -208,6 +208,8 @@ export const MultimodalPinch: React.FC = () => {
         <br />
         On mobile/tablet, pinch in/out. On computer, use up/down arrow keys.
         Code at <a href="https://github.com/chuanenlin/semanticpinching" target="_blank" rel="noopener noreferrer">https://github.com/chuanenlin/semanticpinching</a>.
+        <br />
+        <span className="author-credit">Made by <a href="https://dlin.org/" target="_blank" rel="noopener noreferrer">David</a>.</span>
       </FooterHint>
     </Container>
   );

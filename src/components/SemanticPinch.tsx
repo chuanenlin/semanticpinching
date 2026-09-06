@@ -213,6 +213,8 @@ export const SemanticPinch: React.FC = () => {
         <br />
         Pinch in/out on mobile or press up/down arrow keys on computer.
         Code at <a href="https://github.com/chuanenlin/semanticpinching" target="_blank" rel="noopener noreferrer">https://github.com/chuanenlin/semanticpinching</a>.
+        <br />
+        <span className="author-credit">Made by <a href="https://dlin.org/" target="_blank" rel="noopener noreferrer">David</a>.</span>
       </FooterHint>
     </Container>
   );
