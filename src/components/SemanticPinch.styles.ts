@@ -223,16 +223,16 @@ export const FooterHint = styled.div`
   text-align: center;
   .author-credit {
     display: inline-block;
-    margin-top: 8px;
-    color: #737373;
-    font-size: 13px;
+    margin-top: 0;
+    color: inherit;
+    font-size: inherit;
   }
   .author-credit a {
-    color: inherit;
-    text-decoration: underline dotted;
+    color: #aaa;
+    text-decoration: none;
     text-underline-offset: 3px;
   }
-  .author-credit a:hover { text-decoration-style: solid; }
+  .author-credit a:hover { text-decoration: underline; }
   .author-credit a:focus-visible { outline: 2px solid currentColor; outline-offset: 4px; }
   hyphens: auto;
   word-wrap: break-word;
