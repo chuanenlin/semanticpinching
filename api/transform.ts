@@ -27,12 +27,14 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     return res.status(400).json({ error: 'Invalid toLevel' });
   }
 
-  if (!process.env.OPENAI_API_KEY) {
-    return res.status(500).json({ error: 'OpenAI API key not configured' });
+  if (!process.env.GEMINI_API_KEY) {
+    return res.status(500).json({ error: 'Gemini API key not configured' });
   }
 
+  // Gemini through its OpenAI-compatible endpoint (the OpenAI account ran out of credit)
   const openai = new OpenAI({
-    apiKey: process.env.OPENAI_API_KEY,
+    apiKey: process.env.GEMINI_API_KEY,
+    baseURL: 'https://generativelanguage.googleapis.com/v1beta/openai/',
   });
 
   try {
@@ -47,7 +49,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
           content: `${prompt}\n\nText: ${content}`
         }
       ],
-      model: "gpt-4o",
+      model: "gemini-flash-lite-latest",
       temperature: 0.7,
       max_tokens: toLevel === 'article' ? 1000 : 200,
       stream: true

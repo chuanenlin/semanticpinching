@@ -45,12 +45,12 @@ emoji ↔ text ↔ image
    npm install
    ```
 
-3. Configure [OpenAI](https://platform.openai.com/api-keys) and [FAL](https://fal.ai/dashboard/keys) keys:
+3. Configure [Gemini](https://aistudio.google.com/apikey) and [FAL](https://fal.ai/dashboard/keys) keys:
    - Create a `.env` file in the root directory
    - Add your API keys:
 
      ```env
-     OPENAI_API_KEY=your_openai_api_key_here
+     GEMINI_API_KEY=your_gemini_api_key_here
      FAL_KEY=your_fal_key_here
      ```
 
