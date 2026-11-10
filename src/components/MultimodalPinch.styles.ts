@@ -9,7 +9,7 @@ export const ContentBox = styled.div`
   width: 100%;
   max-width: 800px;
   margin: 0 auto;
-  margin-top: 4rem;
+  margin-top: 0.5rem;
   margin-bottom: 12rem;
 `;
 

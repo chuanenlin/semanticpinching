@@ -4,11 +4,10 @@ import { usePinchNavigation } from '../hooks/usePinchNavigation';
 import { generateImage, generateCaption } from '../utils/fal';
 import { transformText } from '../utils/openai';
 import { MultimodalLevel, MULTIMODAL_LEVELS } from '../types/multimodal';
+import { PinchGuideTop, PinchGuideButtons } from './PinchGuide';
 import {
   Container,
   FooterHint,
-  LevelIndicatorContainer,
-  LevelText,
 } from './SemanticPinch.styles';
 import {
   ContentBox,
@@ -21,6 +20,7 @@ import {
 export const MultimodalPinch: React.FC = () => {
   const [currentLevel, setCurrentLevel] = useState<number>(1);
   const [showKeystroke, setShowKeystroke] = useState<'up' | 'down' | null>(null);
+  const [hasMoved, setHasMoved] = useState(false);
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [showCompletion, setShowCompletion] = useState(false);
@@ -34,6 +34,7 @@ export const MultimodalPinch: React.FC = () => {
   const handleLevelChange = useCallback(async (direction: number) => {
     const newLevel = Math.max(0, Math.min(MULTIMODAL_LEVELS.length - 1, currentLevel + direction));
     if (newLevel !== currentLevel && !isLoading) {
+      setHasMoved(true);
       setShowKeystroke(direction < 0 ? 'up' : 'down');
       setIsTransitioning(true);
       setIsLoading(true);
@@ -96,7 +97,7 @@ export const MultimodalPinch: React.FC = () => {
     }
   }, [currentLevel, content, isLoading]);
 
-  usePinchNavigation({
+  const { isMobile } = usePinchNavigation({
     onLevelChange: handleLevelChange,
     isTransitioning: isTransitioning || isLoading
   });
@@ -133,20 +134,15 @@ export const MultimodalPinch: React.FC = () => {
 
   return (
     <Container>
+      <PinchGuideTop
+        tagline={isMobile
+          ? 'Turn an emoji into text, and text into an image: pinch out goes toward the image, pinch in toward the emoji.'
+          : 'Turn an emoji into text, and text into an image: ↓ goes toward the image, ↑ toward the emoji.'}
+        levels={MULTIMODAL_LEVELS}
+        current={currentLevel}
+        busy={isLoading}
+      />
       <ContentBox>
-        <LevelIndicatorContainer>
-          <AnimatePresence mode="wait">
-            <LevelText
-              key={currentLevel}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.2 }}
-            >
-              {MULTIMODAL_LEVELS[currentLevel].charAt(0).toUpperCase() + MULTIMODAL_LEVELS[currentLevel].slice(1)}
-            </LevelText>
-          </AnimatePresence>
-        </LevelIndicatorContainer>
 
         <AnimatePresence>
           {(isLoading || showCompletion) && (
@@ -201,12 +197,22 @@ export const MultimodalPinch: React.FC = () => {
             </motion.div>
           )}
         </AnimatePresence>
+        <PinchGuideButtons
+          current={currentLevel}
+          count={MULTIMODAL_LEVELS.length}
+          busy={isLoading}
+          isTouch={isMobile}
+          pressed={showKeystroke}
+          nudge={!hasMoved}
+          upLabel="Toward emoji"
+          downLabel="Toward image"
+          onStep={handleLevelChange}
+        />
       </ContentBox>
 
       <FooterHint>
         Semantic Pinching 🤏
         <br />
-        On mobile/tablet, pinch in/out. On computer, use up/down arrow keys.
         Code at <a href="https://github.com/chuanenlin/semanticpinching" target="_blank" rel="noopener noreferrer">https://github.com/chuanenlin/semanticpinching</a>.
         <br />
         <span className="author-credit">Made by <a href="https://dlin.org/" target="_blank" rel="noopener noreferrer">David</a>.</span>

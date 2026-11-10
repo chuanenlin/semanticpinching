@@ -3,11 +3,10 @@ import { AnimatePresence } from 'framer-motion';
 import { transformText } from '../utils/openai';
 import { usePinchNavigation } from '../hooks/usePinchNavigation';
 import { SemanticLevel, SEMANTIC_LEVELS } from '../types/semantic';
+import { PinchGuideTop, PinchGuideButtons } from './PinchGuide';
 import {
   Container,
   ContentBox,
-  LevelIndicatorContainer,
-  LevelText,
   KeystrokeIndicator,
   ContentContainer,
   ContentWrapper,
@@ -24,6 +23,7 @@ export const SemanticPinch: React.FC = () => {
   const [showCompletion, setShowCompletion] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [showKeystroke, setShowKeystroke] = useState<'up' | 'down' | null>(null);
+  const [hasMoved, setHasMoved] = useState(false);
 
   const transformContent = useCallback(async (fromLevel: SemanticLevel, toLevel: SemanticLevel) => {
     setIsTransforming(true);
@@ -57,8 +57,10 @@ export const SemanticPinch: React.FC = () => {
   }, [content]);
 
   const handleLevelChange = useCallback(async (direction: number) => {
+    if (isTransforming) return;
     const newLevel = Math.max(0, Math.min(SEMANTIC_LEVELS.length - 1, currentLevel + direction));
     if (newLevel !== currentLevel) {
+      setHasMoved(true);
       setShowKeystroke(direction < 0 ? 'up' : 'down');
       setTimeout(() => setShowKeystroke(null), 800);
       setCurrentLevel(newLevel);
@@ -66,9 +68,20 @@ export const SemanticPinch: React.FC = () => {
       const toLevel = SEMANTIC_LEVELS[newLevel];
       transformContent(fromLevel, toLevel);
     }
-  }, [currentLevel, transformContent]);
+  }, [currentLevel, transformContent, isTransforming]);
 
-  usePinchNavigation({
+  // Clicking a level on the ladder jumps straight to it (the model only needs the target level)
+  const handleJump = useCallback((index: number) => {
+    if (isTransforming || index === currentLevel) return;
+    setHasMoved(true);
+    setShowKeystroke(index < currentLevel ? 'up' : 'down');
+    setTimeout(() => setShowKeystroke(null), 800);
+    const fromLevel = SEMANTIC_LEVELS[currentLevel];
+    setCurrentLevel(index);
+    transformContent(fromLevel, SEMANTIC_LEVELS[index]);
+  }, [currentLevel, isTransforming, transformContent]);
+
+  const { isMobile } = usePinchNavigation({
     onLevelChange: handleLevelChange,
     isTransitioning: isTransforming
   });
@@ -135,20 +148,16 @@ export const SemanticPinch: React.FC = () => {
 
   return (
     <Container>
+      <PinchGuideTop
+        tagline={isMobile
+          ? 'Zoom text in and out like a map: pinch out adds detail, pinch in sums it up. Tap the text to write your own.'
+          : 'Zoom text in and out like a map: ↓ adds detail, ↑ sums it up. Click the text to write your own.'}
+        levels={SEMANTIC_LEVELS}
+        current={currentLevel}
+        busy={isTransforming}
+        onJump={handleJump}
+      />
       <ContentBox>
-        <LevelIndicatorContainer>
-          <AnimatePresence mode="wait">
-            <LevelText
-              key={currentLevel}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.2 }}
-            >
-              {SEMANTIC_LEVELS[currentLevel].charAt(0).toUpperCase() + SEMANTIC_LEVELS[currentLevel].slice(1)}
-            </LevelText>
-          </AnimatePresence>
-        </LevelIndicatorContainer>
 
         <AnimatePresence mode="wait">
           {(isTransforming || showCompletion) && (
@@ -207,11 +216,22 @@ export const SemanticPinch: React.FC = () => {
             )}
           </AnimatePresence>
         </ContentContainer>
+
+        <PinchGuideButtons
+          current={currentLevel}
+          count={SEMANTIC_LEVELS.length}
+          busy={isTransforming}
+          isTouch={isMobile}
+          pressed={showKeystroke}
+          nudge={!hasMoved}
+          upLabel="Shorter"
+          downLabel="Longer"
+          onStep={handleLevelChange}
+        />
       </ContentBox>
       <FooterHint>
         Semantic Pinching 🤏.
         <br />
-        Pinch in/out on mobile or press up/down arrow keys on computer.
         Code at <a href="https://github.com/chuanenlin/semanticpinching" target="_blank" rel="noopener noreferrer">https://github.com/chuanenlin/semanticpinching</a>.
         <br />
         <span className="author-credit">Made by <a href="https://dlin.org/" target="_blank" rel="noopener noreferrer">David</a>.</span>
